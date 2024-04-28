@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BookLend</string>
+    <string name="logo">Ini Logo Aplikasi BookLend</string>
+    <string name="icon_google">Ini Icon Google</string>
 </resources>
