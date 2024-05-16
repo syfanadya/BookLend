@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.ui.screen.AdminLanding
+import org.d3if3128.booklend.ui.screen.AdminLogin
 import org.d3if3128.booklend.ui.screen.LoginScreen
 import org.d3if3128.booklend.ui.screen.MainScreen
 import org.d3if3128.booklend.ui.screen.MainScreen2
@@ -36,6 +37,10 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
 
         composable(route = Screen.AdminLanding.route){
             AdminLanding(navController)
+        }
+
+        composable(route = Screen.AdminLogin.route){
+            AdminLogin(navController)
         }
 
     }

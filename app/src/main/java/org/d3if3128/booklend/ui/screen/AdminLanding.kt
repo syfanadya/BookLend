@@ -137,7 +137,7 @@ fun ScreenContentAdminLand(navController: NavController,modifier: Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.AdminLanding.route) },
+                    onClick = { navController.navigate(Screen.AdminLogin.route) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                     modifier = Modifier
                         .width(249.dp)
