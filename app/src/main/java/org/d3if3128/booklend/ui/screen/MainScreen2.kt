@@ -84,7 +84,7 @@ fun ScreenContent2(navController: NavController,modifier: Modifier) {
                 fontSize = 14.sp
             )
 
-            Spacer(modifier = Modifier.height(100.dp))
+
             // Spacer untuk memberi ruang di atas teks
 
             // Gambar lain di atas latar belakang

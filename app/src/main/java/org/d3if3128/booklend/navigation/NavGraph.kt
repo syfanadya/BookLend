@@ -10,6 +10,7 @@ import org.d3if3128.booklend.ui.screen.AdminLogin
 import org.d3if3128.booklend.ui.screen.LoginScreen
 import org.d3if3128.booklend.ui.screen.MainScreen
 import org.d3if3128.booklend.ui.screen.MainScreen2
+import org.d3if3128.booklend.ui.screen.Profile
 import org.d3if3128.booklend.ui.screen.RegisterScreen
 
 
@@ -41,6 +42,10 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
 
         composable(route = Screen.AdminLogin.route){
             AdminLogin(navController)
+        }
+
+        composable(route = Screen.Profil.route){
+            Profile(navController)
         }
 
     }
