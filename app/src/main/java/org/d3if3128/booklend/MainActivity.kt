@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.navigation.SetupNavGraph
-import org.d3if3128.booklend.ui.screen.HomeScreen
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,8 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    SetupNavGraph()
-                    HomeScreen(rememberNavController())
+                   SetupNavGraph()
                 }
             }
         }
