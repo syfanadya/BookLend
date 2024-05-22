@@ -22,12 +22,12 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -98,9 +98,9 @@ fun AdminHomeScreen(navController: NavHostController) {
             hasNews = false
         ),
         BottomNavigationItem(
-            title = "Notifikasi",
-            selectedIcon = Icons.Filled.Notifications,
-            unselectedIcon = Icons.Outlined.Notifications,
+            title = "Peminjaman",
+            selectedIcon = Icons.Filled.Email,
+            unselectedIcon = Icons.Outlined.Email,
             hasNews = false,
             badgeCount = 45
         ),
@@ -181,6 +181,7 @@ fun AdminHomeScreen(navController: NavHostController) {
                 }
             }
         },
+
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -358,7 +359,7 @@ fun GridBuku(buku: Buku, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+fun AdminHomeScreenPreview() {
     BookLendTheme {
         AdminHomeScreen(rememberNavController())
     }

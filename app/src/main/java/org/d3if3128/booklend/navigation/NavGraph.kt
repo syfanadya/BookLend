@@ -12,6 +12,7 @@ import org.d3if3128.booklend.ui.screen.AdminDetailBuku
 import org.d3if3128.booklend.ui.screen.AdminHomeScreen
 import org.d3if3128.booklend.ui.screen.AdminLanding
 import org.d3if3128.booklend.ui.screen.AkunScreen
+import org.d3if3128.booklend.ui.screen.HomeScreen
 import org.d3if3128.booklend.ui.screen.KEY_ID_BUKU
 import org.d3if3128.booklend.ui.screen.LoginScreen
 import org.d3if3128.booklend.ui.screen.RegisterScreen
@@ -59,6 +60,10 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
         }
         composable(route = Screen.About.route){
             AboutScreen(navController)
+        }
+
+        composable(route = Screen.UserHome.route){
+            HomeScreen(navController)
         }
     }
 }
