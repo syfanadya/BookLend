@@ -14,4 +14,15 @@ data class Buku(
     val penulisbuku: String,
     val deskripsibuku: String,
     val tahunterbit: String
-)
+) {
+    fun doesMactchSearchQuery(query: String) : Boolean{
+        val matchingCombinations = listOf(
+            judulbuku,
+            genrebuku,
+            penulisbuku
+        )
+        return matchingCombinations.any{
+            it.contains(query, ignoreCase = true)
+        }
+    }
+}

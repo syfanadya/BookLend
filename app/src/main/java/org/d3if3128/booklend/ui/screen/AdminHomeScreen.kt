@@ -195,7 +195,6 @@ fun AdminHomeScreen(navController: NavHostController) {
             showList,
             Modifier.padding(padding),
             navController,
-            searchData = {}
         )
 
     }
@@ -207,15 +206,20 @@ fun AdminHomeScreenContent(
     showList: Boolean,
     modifier: Modifier,
     navController: NavHostController,
-    // Fungsi yang akan dipanggil saat melakukan pencarian
-    searchData: (String) -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") } // State untuk menyimpan teks pencarian
+
     val context = LocalContext.current
     val db = BooklendDb.getInstance(context)
     val factoryBuku = ViewModelFactoryBuku(db.dao)
     val viewModel: MainViewModelBuku = viewModel(factory = factoryBuku)
     val databuku by viewModel.databuku.collectAsState()
+    val searchText by viewModel.searchText.collectAsState()
+
+    val filteredBooks = if (searchText.isEmpty()) {
+        databuku
+    } else {
+        databuku.filter { it.doesMactchSearchQuery(searchText) }
+    }
 
     if (databuku.isEmpty()) {
         Column(
@@ -232,38 +236,29 @@ fun AdminHomeScreenContent(
             // Search bar
             TextField(
                 value = searchText,
-                onValueChange = {
-                    searchText = it
-                    searchData(it) // Panggil fungsi pencarian dengan teks yang baru
-                },
+                onValueChange = viewModel::onSearchTextChange,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                label = {
-                    Text(
-                        "Search",
-                        style = TextStyle(color = Color(0xFF2587DC)) // Mengubah warna teks label
-                    )
-                },// Label untuk search bar
+                placeholder = { Text(text = "Search")},
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon", tint = Color(0xFF2587DC)) }, // Icon pencarian
 //                singleLine = true, // Menentukan search bar hanya satu baris
                 textStyle = TextStyle(color = Color(0xFF2587DC)), // Gaya teks search bar
                 shape = MaterialTheme.shapes.medium // Bentuk search bar
             )
-
             if (showList) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(bottom = 84.dp)
                 ) {
-                    items(databuku) {
-                        ListBuku(buku = it) {
-                            navController.navigate(Screen.FormUbah.withIdBuku(it.idbuku))
-                        }
-                        Divider()
+                    items(filteredBooks){ buku ->
+                            ListBuku(buku = buku) {
+                                navController.navigate(Screen.FormUbah.withIdBuku(buku.idbuku))
+                            }
+                            Divider()
                     }
                 }
-            } else {
+            }  else {
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier.fillMaxSize(),
                     columns = StaggeredGridCells.Fixed(2),
@@ -272,9 +267,9 @@ fun AdminHomeScreenContent(
                     contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp),
 
                     ) {
-                    items(databuku) {
-                        GridBuku(buku = it) {
-                            //navController.navigate(Screen.Home.route)
+                    items(filteredBooks) { buku ->
+                        GridBuku(buku = buku) {
+                            navController.navigate(Screen.FormUbah.withIdBuku(buku.idbuku))
                         }
                     }
                 }
