@@ -147,7 +147,11 @@ fun AdminHomeScreen(navController: NavHostController) {
                         selected = selectedItemIndex == index,
                         onClick = {
                             selectedItemIndex = index
-                            //navController.navigate(Screen.DetailBuku.route)
+                            when (index) {
+                                0 -> navController.navigate(Screen.AdminHome.route)
+                                1 -> navController.navigate(Screen.Akun.route)
+                                2 -> navController.navigate(Screen.Akun.route)
+                            }
                         },
                         label = {
                             Text(text = item.title)

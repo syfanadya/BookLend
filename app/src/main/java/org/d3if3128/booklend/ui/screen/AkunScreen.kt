@@ -39,7 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.R
 import org.d3if3128.booklend.navigation.Screen
@@ -94,11 +93,16 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxSize().padding(16.dp) // Pastikan row mengisi penuh ukuran card dan beri padding agar tidak menempel ke tepi
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp) // Pastikan row mengisi penuh ukuran card dan beri padding agar tidak menempel ke tepi
                 ) {
-                    Column {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
                         Text(
-                            text = "Dyna Rosalina",
+                            text = "Admin BookLend",
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 lineHeight = 24.sp,
@@ -108,17 +112,7 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
                             )
                         )
                         Text(
-                            text = "dyna@gmail.com",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 24.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF49454F),
-                                letterSpacing = 0.5.sp,
-                            )
-                        )
-                        Text(
-                            text = "+62 823 8909 8269",
+                            text = "bookl@gmail.com",
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 24.sp,
@@ -133,58 +127,6 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
         }
 
         Spacer(modifier = Modifier.height(36.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Button(
-                onClick = {
-                    // Tambahkan aksi yang diinginkan di sini
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp) // 56.dp dikurangi 2.dp untuk memberikan ruang bagi border bawah
-                    .align(Alignment.TopCenter), // Memposisikan tombol di atas border
-                contentPadding = PaddingValues(),
-                shape = RoundedCornerShape(size = 0.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.person_icon), // Ganti dengan resource ikon yang sesuai
-                        contentDescription = stringResource(R.string.ini_icon_ubah_profile), // Deskripsi untuk ikon
-                        modifier = Modifier.size(24.dp),
-                        tint = Color(0xFF3C4550)
-                    )
-                    Spacer(modifier = Modifier.width(20.dp)) // Tambahkan sedikit spasi antara ikon dan teks
-
-                    Text(
-                        text = stringResource(R.string.ubah_profil),
-                        fontWeight = FontWeight.Bold, // Gunakan FontWeight.Bold untuk font weight 700
-                        fontSize = 20.sp,
-                        color = Color(0xFF3C4550)
-                    )
-
-                }
-            }
-
-            // Border bawah
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(Color.Black)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -226,9 +168,9 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(2.dp)
+                    .height(1.dp)
                     .align(Alignment.BottomCenter)
-                    .background(Color.Black)
+                    .background(Color(0xFFB2BBC7))
             )
         }
 
@@ -256,8 +198,8 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.person_icon), // Ganti dengan resource ikon yang sesuai
-                        contentDescription = stringResource(R.string.ini_icon_ubah_profile), // Deskripsi untuk ikon
+                        painter = painterResource(id = R.drawable.majesticons_logout), // Ganti dengan resource ikon yang sesuai
+                        contentDescription = stringResource(R.string.ini_icon_keluar),
                         modifier = Modifier.size(24.dp),
                         tint = Color(0xFF3C4550)
                     )
@@ -275,9 +217,9 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(2.dp)
+                    .height(1.dp)
                     .align(Alignment.BottomCenter)
-                    .background(Color.Black)
+                    .background(Color(0xFFB2BBC7))
             )
         }
     }

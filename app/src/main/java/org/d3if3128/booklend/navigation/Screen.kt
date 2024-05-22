@@ -15,5 +15,4 @@ sealed class Screen(val route: String) {
     data object FormUbah: Screen("detailBukuScreen/{$KEY_ID_BUKU}"){
         fun withIdBuku(idBuku: Long) = "detailBukuScreen/$idBuku"
     }
-
 }
