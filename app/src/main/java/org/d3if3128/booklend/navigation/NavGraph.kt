@@ -22,7 +22,7 @@ import org.d3if3128.booklend.ui.screen.RegisterScreen
 fun SetupNavGraph(navController: NavHostController = rememberNavController()){
     NavHost(
         navController = navController,
-        startDestination = Screen.AdminHome.route
+        startDestination = Screen.Register.route
     ){
 
         composable(route = Screen.Login.route){

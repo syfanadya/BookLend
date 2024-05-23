@@ -246,7 +246,8 @@ fun AdminHomeScreenContent(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 placeholder = { Text(text = "Search")},
-                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon", tint = Color(0xFF2587DC)) }, // Icon pencarian
+                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon",
+                    tint = Color(0xFF2587DC)) }, // Icon pencarian
 //                singleLine = true, // Menentukan search bar hanya satu baris
                 textStyle = TextStyle(color = Color(0xFF2587DC)), // Gaya teks search bar
                 shape = MaterialTheme.shapes.medium // Bentuk search bar

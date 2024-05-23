@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import org.d3if3128.booklend.model.Buku
+import org.d3if3128.booklend.model.User
 
 @Dao
 interface BooklendDao {
@@ -23,4 +24,10 @@ interface BooklendDao {
 
     @Query("DELETE FROM buku WHERE idbuku = :idbuku")
     suspend fun deleteById(idbuku: Long)
+
+    @Insert
+    suspend fun insert(user: User)
+
+    @Update
+    suspend fun update (user: User)
 }

@@ -30,7 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +57,9 @@ import org.d3if3128.booklend.ui.theme.BookLendTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(navController: NavController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmationPassword by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -69,12 +74,12 @@ fun RegisterScreen(navController: NavController) {
     ) { padding ->
         // FormLogin call updated here if needed to use navController
         FormRegister(
-            email = "",
-            onEmailChange = { /* handle email change */ },
-            password = "",
-            onPasswordChange = { /* handle password change */ },
-            confirmationPassword = "",
-            onConfirmationPasswordChange = { },
+            email = email,
+            onEmailChange = { email = it },
+            password = password,
+            onPasswordChange = { password = it },
+            confirmationPassword = confirmationPassword,
+            onConfirmationPasswordChange = { confirmationPassword = it },
             modifier = Modifier.padding(padding),
             navController = navController,
         )
