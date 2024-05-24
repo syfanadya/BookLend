@@ -25,9 +25,9 @@ interface BooklendDao {
     @Query("DELETE FROM buku WHERE idbuku = :idbuku")
     suspend fun deleteById(idbuku: Long)
 
-    @Insert
-    suspend fun insert(user: User)
-
-    @Update
-    suspend fun update (user: User)
+//    @Insert
+//    suspend fun insert(user: User)
+//
+//    @Update
+//    suspend fun update (user: User)
 }

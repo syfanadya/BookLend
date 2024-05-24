@@ -10,11 +10,13 @@ import androidx.navigation.navArgument
 import org.d3if3128.booklend.ui.screen.AboutScreen
 import org.d3if3128.booklend.ui.screen.AdminDetailBuku
 import org.d3if3128.booklend.ui.screen.AdminHomeScreen
-import org.d3if3128.booklend.ui.screen.AdminLanding
+import org.d3if3128.booklend.ui.screen.AdminLogin
 import org.d3if3128.booklend.ui.screen.AkunScreen
 import org.d3if3128.booklend.ui.screen.HomeScreen
 import org.d3if3128.booklend.ui.screen.KEY_ID_BUKU
 import org.d3if3128.booklend.ui.screen.LoginScreen
+import org.d3if3128.booklend.ui.screen.MainScreen
+import org.d3if3128.booklend.ui.screen.MainScreen2
 import org.d3if3128.booklend.ui.screen.RegisterScreen
 
 
@@ -22,8 +24,16 @@ import org.d3if3128.booklend.ui.screen.RegisterScreen
 fun SetupNavGraph(navController: NavHostController = rememberNavController()){
     NavHost(
         navController = navController,
-        startDestination = Screen.Register.route
+        startDestination = Screen.Home.route
     ){
+
+        composable(route = Screen.Home.route){
+            MainScreen(navController)
+        }
+
+        composable(route = Screen.Home2.route){
+            MainScreen2(navController)
+        }
 
         composable(route = Screen.Login.route){
             LoginScreen(navController)
@@ -33,8 +43,8 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
             RegisterScreen(navController)
         }
 
-        composable(route = Screen.AdminLanding.route){
-            AdminLanding(navController)
+        composable(route = Screen.AdminLogin.route){
+            AdminLogin(navController)
         }
 
         composable(route = Screen.AdminHome.route){

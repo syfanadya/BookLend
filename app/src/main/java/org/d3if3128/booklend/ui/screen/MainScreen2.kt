@@ -1,6 +1,7 @@
 package org.d3if3128.booklend.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,16 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,37 +34,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.R
 import org.d3if3128.booklend.navigation.Screen
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminLanding(navController: NavController) {
+fun MainScreen2(navController: NavHostController) {
     // Scaffold with ScreenContent
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Kembali") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            // TopAppBar setup if needed
         }
     ) { padding ->
         // ScreenContent displayed within Scaffold
-        ScreenContentAdminLand(navController = navController, modifier = Modifier.padding(padding))
+        ScreenContent2(navController = navController, modifier = Modifier.padding(padding))
     }
 }
 
 
 @Composable
-fun ScreenContentAdminLand(navController: NavController,modifier: Modifier) {
+fun ScreenContent2(navController: NavHostController,modifier: Modifier) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -97,7 +84,7 @@ fun ScreenContentAdminLand(navController: NavController,modifier: Modifier) {
                 fontSize = 14.sp
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+
             // Spacer untuk memberi ruang di atas teks
 
             // Gambar lain di atas latar belakang
@@ -131,13 +118,13 @@ fun ScreenContentAdminLand(navController: NavController,modifier: Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.4f)
+                    .fillMaxHeight(0.8f)
                     .padding(16.dp), // Padding untuk konten di dalam Box
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.AdminLanding.route) },
+                    onClick = { navController.navigate(Screen.AdminLogin.route) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                     modifier = Modifier
                         .width(249.dp)
@@ -146,15 +133,34 @@ fun ScreenContentAdminLand(navController: NavController,modifier: Modifier) {
                     shape = RoundedCornerShape(size = 18.dp)
 
                 ) {
-
-                    val colorHex = 0xFF2587DC
-                    val color = Color(colorHex)
-
                     Text(
-                        text = stringResource(id = R.string.ayo_mulai),
+                        text = stringResource(id = R.string.admin),
                         fontWeight = FontWeight(700),
                         fontSize = 16.sp,
-                        color = color // Atur warna teks (opsional)
+                        color = Color.Black
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = stringResource(id = R.string.atau), style = textStyle, color = Color.White)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {  navController.navigate(Screen.Login.route) },
+                    colors = ButtonDefaults.buttonColors(Color.Transparent), // Mengatur warna latar belakang menjadi transparan
+                    modifier = Modifier
+                        .width(249.dp)
+                        .height(56.dp),
+                    contentPadding = PaddingValues(),
+                    shape = RoundedCornerShape(size = 18.dp),
+                    border = BorderStroke(0.5.dp, Color.White),
+
+                    ) {
+                    Text(
+                        text = stringResource(id = R.string.pengguna),
+                        fontWeight = FontWeight(700),
+                        fontSize = 16.sp,
+                        color = Color.White // Atur warna teks (opsional)
                     )
                 }
             }
@@ -172,8 +178,8 @@ fun ScreenContentAdminLand(navController: NavController,modifier: Modifier) {
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun GreetingPreview3() {
-    BookLendTheme {
-        AdminLanding(rememberNavController())
+fun GreetingPreview2() {
+    BookLendTheme{
+        MainScreen2(rememberNavController())
     }
 }

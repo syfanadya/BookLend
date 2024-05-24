@@ -7,9 +7,9 @@ sealed class Screen(val route: String) {
     data object Home2: Screen("mainscreen2")
     data object Login: Screen("loginscreen")
     data object Register: Screen("registerscreen")
-    data object AdminLanding: Screen("adminlanding")
     data object Akun: Screen("akun")
     data object About: Screen("about")
+    data object AdminLogin: Screen("adminlogin")
     data object AdminHome: Screen("adminhome")
     data object FormBaru: Screen("detailBukuScreen")
     data object FormUbah: Screen("detailBukuScreen/{$KEY_ID_BUKU}"){
