@@ -61,4 +61,8 @@
     <string name="lainnya">Opsi lainnya</string>
     <string name="hapus">Hapus Buku</string>
     <string name="ini_icon_keluar">Ini icon keluar</string>
+    <string name="password_mismatch">Konfirmasi password tidak cocok</string>
+    <string name="email_sudah_terdaftar">Email sudah terdaftar</string>
+    <string name="email_belum_terdaftar">Email belum terdaftar</string>
+    <string name="password_salah">Password salah</string>
 </resources>
