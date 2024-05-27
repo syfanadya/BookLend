@@ -80,24 +80,18 @@ fun LoginScreen(navController: NavController) {
             when {
                 email.isBlank() || password.isBlank() -> {
                     Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
-                } else -> {
-                    if (!viewModel.isEmailRegistered(email)) {
-                        Toast.makeText(
-                            context,
-                            R.string.email_belum_terdaftar,
-                            Toast.LENGTH_LONG).show()
+                }
+                !viewModel.isEmailRegistered(email) -> {
+                    Toast.makeText(context, R.string.email_belum_terdaftar, Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    val user = viewModel.getUserByEmailAndPassword(email, password)
+                    if (user != null) {
+                        // Login berhasil
+                        navController.navigate(Screen.UserHome.withIdUser(user.iduser))
                     } else {
-                        val user = viewModel.getUserByEmailAndPassword(email, password)
-                        if (user != null) {
-                            // Login berhasil
-                            navController.navigate(
-                                Screen.UserHome.route
-//                                        + "/${user.iduser}"
-                            )
-                        }  else {
-                            // Email terdaftar, tapi password tidak cocok
-                            Toast.makeText(context,R.string.password_salah, Toast.LENGTH_LONG).show()
-                        }
+                        // Email terdaftar, tapi password tidak cocok
+                        Toast.makeText(context, R.string.password_salah, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -108,7 +102,6 @@ fun LoginScreen(navController: NavController) {
     val loginAction: () -> Unit = {
         loginRequested = true
     }
-
 
     Scaffold(
         topBar = {
@@ -122,7 +115,6 @@ fun LoginScreen(navController: NavController) {
             )
         }
     ) { padding ->
-        // FormLogin call updated here if needed to use navController
         FormLogin(
             email = email,
             onEmailChange = { email = it },
@@ -134,7 +126,6 @@ fun LoginScreen(navController: NavController) {
         )
     }
 }
-
 
 
 @Composable

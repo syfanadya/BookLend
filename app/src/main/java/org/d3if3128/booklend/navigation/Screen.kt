@@ -1,6 +1,7 @@
 package org.d3if3128.booklend.navigation
 
 import org.d3if3128.booklend.ui.screen.KEY_ID_BUKU
+import org.d3if3128.booklend.ui.screen.KEY_ID_USER
 
 sealed class Screen(val route: String) {
     data object Home: Screen("mainscreen")
@@ -15,5 +16,7 @@ sealed class Screen(val route: String) {
     data object FormUbah: Screen("detailBukuScreen/{$KEY_ID_BUKU}"){
         fun withIdBuku(idBuku: Long) = "detailBukuScreen/$idBuku"
     }
-    data object UserHome: Screen("userhome")
+    data object UserHome: Screen("userhome/{$KEY_ID_USER}"){
+        fun withIdUser(iduser: Long) = "userhome/$iduser"
+    }
 }

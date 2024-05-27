@@ -14,6 +14,7 @@ import org.d3if3128.booklend.ui.screen.AdminLogin
 import org.d3if3128.booklend.ui.screen.AkunScreen
 import org.d3if3128.booklend.ui.screen.HomeScreen
 import org.d3if3128.booklend.ui.screen.KEY_ID_BUKU
+import org.d3if3128.booklend.ui.screen.KEY_ID_USER
 import org.d3if3128.booklend.ui.screen.LoginScreen
 import org.d3if3128.booklend.ui.screen.MainScreen
 import org.d3if3128.booklend.ui.screen.MainScreen2
@@ -72,8 +73,14 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
             AboutScreen(navController)
         }
 
-        composable(route = Screen.UserHome.route){
-            HomeScreen(navController)
+        composable(
+            route = Screen.UserHome.route,
+            arguments = listOf (
+                navArgument(KEY_ID_USER){type = NavType.LongType}
+            )
+        ){navBackStackEntryUser ->
+            val iduser = navBackStackEntryUser.arguments?.getLong(KEY_ID_USER)
+            HomeScreen(navController, iduser)
         }
     }
 }
