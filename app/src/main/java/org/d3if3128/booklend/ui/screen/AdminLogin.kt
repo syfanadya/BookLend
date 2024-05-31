@@ -58,6 +58,7 @@ import org.d3if3128.booklend.ui.theme.BookLendTheme
 fun AdminLogin(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -78,8 +79,16 @@ fun AdminLogin(navController: NavHostController) {
             password = password,
             onPasswordChange = { password = it },
             onLoginClick = {
-                           navController.navigate(Screen.AdminHome.route)
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    // Lakukan login jika email dan password tidak kosong
+                    navController.navigate(Screen.AdminHome.route)
+                } else {
+                    // Tampilkan pesan kesalahan jika email atau password kosong
+                    errorMessage = "Email dan password harus diisi"
+                }
             },
+            errorMessage = errorMessage,
+            onErrorMessageChange = { errorMessage = it },
             modifier = Modifier.padding(padding),
         )
     }
@@ -94,6 +103,8 @@ fun FormAdminLogin(
     password: String,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
+    errorMessage: String,
+    onErrorMessageChange: (String) -> Unit,
     modifier: Modifier,
 ) {
 
@@ -166,8 +177,23 @@ fun FormAdminLogin(
             modifier = Modifier.fillMaxWidth()
         )
 
+        if (errorMessage.isNotEmpty()) {
+            // Tampilkan pesan kesalahan jika ada
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
         Button(
-            onClick = onLoginClick,
+            onClick = {
+                if (email == "admin@gmail.com" && password == "admin123") {
+                    onLoginClick()
+                } else {
+                    onErrorMessageChange("Email atau password salah") // Memperbarui pesan kesalahan
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2587DC)),
             modifier = Modifier
                 .fillMaxWidth()
