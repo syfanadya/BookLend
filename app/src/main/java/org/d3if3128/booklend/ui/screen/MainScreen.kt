@@ -43,9 +43,9 @@ fun MainScreen(navController: NavHostController) {
 
     var navigateToLoginScreen by remember { mutableStateOf(false) }
 
-    // LaunchedEffect to navigate after 5 seconds
+    // LaunchedEffect to navigate after 0.1 seconds
     LaunchedEffect(true) {
-        delay(5000) // Delay for 5 seconds
+        delay(100) // Delay for 0.1 seconds
         navigateToLoginScreen = true // Set the flag to navigate
     }
 
