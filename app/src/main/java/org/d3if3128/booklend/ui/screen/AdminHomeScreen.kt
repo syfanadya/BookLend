@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
@@ -55,6 +56,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -66,6 +68,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -292,13 +295,16 @@ fun ListBuku(buku: Buku, onClick: () -> Unit) {
             .padding(16.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.CenterVertically
     ) {
         val imageUri = Uri.parse(buku.gambarbuku)
         Image(
             painter = rememberAsyncImagePainter(model = imageUri),
             contentDescription = null,
-            modifier = Modifier.size(64.dp), // Adjust the size as needed
+            modifier = Modifier
+                .width(71.dp)
+                .height(108.dp)
+                .clip(RoundedCornerShape(8.dp)), // Adjust the size as needed
             contentScale = ContentScale.FillBounds
         )
         Column(
@@ -307,6 +313,7 @@ fun ListBuku(buku: Buku, onClick: () -> Unit) {
         ) {
             Text(
                 text = buku.judulbuku,
+                style = TextStyle(fontSize = 18.sp),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold

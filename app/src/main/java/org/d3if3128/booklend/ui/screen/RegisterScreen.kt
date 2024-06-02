@@ -224,18 +224,8 @@ fun FormRegister(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            trailingIcon = {
-                val image: Painter = if (passwordVisible) {
-                    painterResource(id = R.drawable.baseline_visibility_24)
-                } else {
-                    painterResource(id = R.drawable.baseline_visibility_off_24)
-                }
-                val description = if (passwordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(painter = image, contentDescription = description)
-                }
-            },
+
             modifier = Modifier.fillMaxWidth()
         )
         Button(

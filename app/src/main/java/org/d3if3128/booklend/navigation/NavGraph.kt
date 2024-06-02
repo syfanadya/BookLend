@@ -19,6 +19,7 @@ import org.d3if3128.booklend.ui.screen.LoginScreen
 import org.d3if3128.booklend.ui.screen.MainScreen
 import org.d3if3128.booklend.ui.screen.MainScreen2
 import org.d3if3128.booklend.ui.screen.RegisterScreen
+import org.d3if3128.booklend.ui.screen.UserDetailBuku
 
 
 @Composable
@@ -82,5 +83,18 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
             val iduser = navBackStackEntryUser.arguments?.getLong(KEY_ID_USER)
             HomeScreen(navController, iduser)
         }
+
+
+        composable(
+            route = Screen.UserDetailBuku.route,
+            arguments = listOf(
+                navArgument(KEY_ID_BUKU){type = NavType.LongType}
+            )
+        ){navBackStackEntry ->
+            val idBuku = navBackStackEntry.arguments?.getLong(KEY_ID_BUKU)
+            UserDetailBuku(navController, idBuku)
+        }
+
+
     }
 }

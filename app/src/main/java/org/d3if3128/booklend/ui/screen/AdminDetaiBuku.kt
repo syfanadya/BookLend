@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -208,7 +209,8 @@ fun FormBuku(
                 contentDescription = null,
                 modifier = Modifier
                     .width(142.dp)
-                    .height(216.dp),
+                    .height(216.dp)
+                    .clip(RoundedCornerShape(16.dp)),
                 contentScale = ContentScale.FillBounds
             )
         }

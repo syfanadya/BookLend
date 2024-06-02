@@ -11,12 +11,18 @@ sealed class Screen(val route: String) {
     data object Akun: Screen("akun")
     data object About: Screen("about")
     data object AdminLogin: Screen("adminlogin")
-    data object AdminHome: Screen("adminhome")
+//    data object AdminHome: Screen("adminhome")
     data object FormBaru: Screen("detailBukuScreen")
     data object FormUbah: Screen("detailBukuScreen/{$KEY_ID_BUKU}"){
         fun withIdBuku(idBuku: Long) = "detailBukuScreen/$idBuku"
     }
+    data object AdminHome: Screen("adminhome/{$KEY_ID_USER}"){
+        fun withIdUser(iduser: Long) = "adminhome/$iduser"
+    }
     data object UserHome: Screen("userhome/{$KEY_ID_USER}"){
         fun withIdUser(iduser: Long) = "userhome/$iduser"
+    }
+    data object UserDetailBuku: Screen("userDetailBukuScreen/{$KEY_ID_BUKU}"){
+        fun withIdBuku(idBuku: Long) = "userDetailBukuScreen/$idBuku"
     }
 }
