@@ -22,7 +22,16 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
-@Database(entities = [Buku::class, User::class], version = 2, exportSchema = false)
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // Tambahkan kolom baru ke tabel user yang sudah ada
+        db.execSQL("ALTER TABLE `user` ADD COLUMN `namalengkap` TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE `user` ADD COLUMN `nohp` TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE `user` ADD COLUMN `usia` TEXT NOT NULL DEFAULT ''")
+    }
+}
+
+@Database(entities = [Buku::class, User::class], version = 3, exportSchema = false)
 abstract class BooklendDb : RoomDatabase() {
     abstract val dao: BooklendDao
     companion object {
@@ -39,7 +48,7 @@ abstract class BooklendDb : RoomDatabase() {
                         BooklendDb::class.java,
                         "booklend.db"
                     )
-                        .addMigrations(MIGRATION_1_2)  // Tambahkan migrasi di sini
+                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)  // Tambahkan migrasi di sini
                         .build()
                     INSTANCE = instance
                 }

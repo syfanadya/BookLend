@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -34,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -59,6 +63,7 @@ import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.R
 import org.d3if3128.booklend.database.BooklendDb
 import org.d3if3128.booklend.navigation.Screen
+import org.d3if3128.booklend.network.UserDataStore
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 import org.d3if3128.booklend.util.ViewModelFactoryUser
 
@@ -68,9 +73,15 @@ import org.d3if3128.booklend.util.ViewModelFactoryUser
 fun RegisterScreen(navController: NavHostController) {
     val context = LocalContext.current
     val db = BooklendDb.getInstance(context)
-    val factoryUser = ViewModelFactoryUser(db.dao)
+    val dao = db.dao // Dapatkan dao dari BooklendDb
+    val userDataStore = UserDataStore(context)
+    val coroutineScope = rememberCoroutineScope()
+    val factoryUser = ViewModelFactoryUser(dao, userDataStore)
     val viewModel: DetailViewModelUser = viewModel(factory = factoryUser)
 
+    var namalengkap by remember { mutableStateOf("") }
+    var nohp by remember { mutableStateOf("") }
+    var usia by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmationPassword by remember { mutableStateOf("") }
@@ -80,7 +91,12 @@ fun RegisterScreen(navController: NavHostController) {
     LaunchedEffect(registerRequested) {
         if (registerRequested) {
             when {
-                email.isBlank() || password.isBlank() || confirmationPassword.isBlank() -> {
+                namalengkap.isBlank() ||
+                nohp.isBlank() ||
+                usia.isBlank() ||
+                email.isBlank() ||
+                password.isBlank() ||
+                confirmationPassword.isBlank() -> {
                     Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                 }
                 password != confirmationPassword -> {
@@ -90,7 +106,7 @@ fun RegisterScreen(navController: NavHostController) {
                     if (viewModel.isEmailRegistered(email)) {
                         Toast.makeText(context,R.string.email_sudah_terdaftar, Toast.LENGTH_LONG).show()
                     } else {
-                        viewModel.insert(email, password)
+                        viewModel.insert(namalengkap, nohp, usia, email, password)
                         navController.navigate(Screen.Login.route)
                     }
                 }
@@ -118,6 +134,12 @@ fun RegisterScreen(navController: NavHostController) {
     ) { padding ->
         // FormLogin call updated here if needed to use navController
         FormRegister(
+            fullname = namalengkap,
+            onFullnameChange = {namalengkap = it},
+            noPhone = nohp,
+            onNoPhoneChange = {nohp = it},
+            age = usia,
+            onAgeChange = {usia = it},
             email = email,
             onEmailChange = { email = it },
             password = password,
@@ -135,6 +157,12 @@ fun RegisterScreen(navController: NavHostController) {
 
 @Composable
 fun FormRegister(
+    fullname: String,
+    onFullnameChange : (String) -> Unit,
+    noPhone: String,
+    onNoPhoneChange: (String) -> Unit,
+    age: String,
+    onAgeChange: (String) -> Unit,
     email: String,
     onEmailChange: (String) -> Unit,
     password: String,
@@ -153,7 +181,8 @@ fun FormRegister(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp,  Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -175,6 +204,39 @@ fun FormRegister(
                 color = Color(0xFF49454F),
                 letterSpacing = 0.07.sp
             )
+        )
+        OutlinedTextField(
+            value = fullname,
+            onValueChange = { onFullnameChange(it) },
+            label = { Text(text = "Nama Lengkap") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
+                imeAction = ImeAction.Next
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = noPhone,
+            onValueChange = { onNoPhoneChange(it) },
+            label = { Text(text = "Nomor Hp") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = age,
+            onValueChange = { onAgeChange(it) },
+            label = { Text(text = "Usia") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = email,

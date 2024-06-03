@@ -66,4 +66,5 @@
     <string name="email_belum_terdaftar">Email belum terdaftar</string>
     <string name="password_salah">Password salah</string>
     <string name="detail_buku">Detail Buku</string>
+    <string name="ubah_profile">Ubah Profil</string>
 </resources>

@@ -5,17 +5,26 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.d3if3128.booklend.database.BooklendDao
-import org.d3if3128.booklend.model.Buku
 import org.d3if3128.booklend.model.User
+import org.d3if3128.booklend.network.UserDataStore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class DetailViewModelUser(private val dao: BooklendDao) : ViewModel() {
+class DetailViewModelUser(private val dao: BooklendDao,  private val userDataStore: UserDataStore) : ViewModel() {
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
 
-    fun insert(email: String, password: String){
+    fun insert(
+        namalengkap: String,
+        nohp: String,
+        usia: String,
+        email: String,
+        password: String
+    ){
         val user =  User(
+            namalengkap = namalengkap,
+            nohp = nohp,
+            usia = usia,
             email = email,
             password = password,
             tanggalbuatakun = formatter.format(Date())
@@ -25,9 +34,20 @@ class DetailViewModelUser(private val dao: BooklendDao) : ViewModel() {
         }
     }
 
-    suspend fun getUser(iduser: Long): User? {
+    suspend fun getUser(email: String): User? {
+        return dao.getUserByEmail(email)
+    }
+
+    suspend fun getUser2(iduser: Long): User? {
         return dao.getUserById(iduser)
     }
+    fun updateUser(user: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(user)
+            userDataStore.saveData(user)  // Ensure this updates the DataStore
+        }
+    }
+
     suspend fun isEmailRegistered(email: String): Boolean {
         return dao.getUserByEmail(email) != null
     }

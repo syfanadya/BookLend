@@ -13,12 +13,15 @@ import org.d3if3128.booklend.ui.screen.AdminHomeScreen
 import org.d3if3128.booklend.ui.screen.AdminLogin
 import org.d3if3128.booklend.ui.screen.AkunScreen
 import org.d3if3128.booklend.ui.screen.HomeScreen
+import org.d3if3128.booklend.ui.screen.KEY_EMAIL_USER
 import org.d3if3128.booklend.ui.screen.KEY_ID_BUKU
 import org.d3if3128.booklend.ui.screen.KEY_ID_USER
 import org.d3if3128.booklend.ui.screen.LoginScreen
 import org.d3if3128.booklend.ui.screen.MainScreen
 import org.d3if3128.booklend.ui.screen.MainScreen2
 import org.d3if3128.booklend.ui.screen.RegisterScreen
+import org.d3if3128.booklend.ui.screen.UbahProfil
+import org.d3if3128.booklend.ui.screen.UserAkunScreen
 import org.d3if3128.booklend.ui.screen.UserDetailBuku
 
 
@@ -70,6 +73,11 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
         composable(route = Screen.Akun.route){
             AkunScreen(navController)
         }
+
+        composable(route = Screen.UserAkun.route){
+            UserAkunScreen(navController)
+        }
+
         composable(route = Screen.About.route){
             AboutScreen(navController)
         }
@@ -77,13 +85,12 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
         composable(
             route = Screen.UserHome.route,
             arguments = listOf (
-                navArgument(KEY_ID_USER){type = NavType.LongType}
+                navArgument(KEY_EMAIL_USER){type = NavType.StringType}
             )
         ){navBackStackEntryUser ->
-            val iduser = navBackStackEntryUser.arguments?.getLong(KEY_ID_USER)
-            HomeScreen(navController, iduser)
+            val email = navBackStackEntryUser.arguments?.getString(KEY_EMAIL_USER)
+            HomeScreen(navController, user = null)
         }
-
 
         composable(
             route = Screen.UserDetailBuku.route,
@@ -94,6 +101,17 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()){
             val idBuku = navBackStackEntry.arguments?.getLong(KEY_ID_BUKU)
             UserDetailBuku(navController, idBuku)
         }
+
+        composable(
+            route = Screen.UbahProfil.route,
+            arguments = listOf(
+                navArgument(KEY_ID_USER){type = NavType.LongType}
+            )
+        ){navBackStackEntry ->
+            val idUser = navBackStackEntry.arguments?.getLong(KEY_ID_USER)
+            UbahProfil(navController, idUser)
+        }
+
 
 
     }

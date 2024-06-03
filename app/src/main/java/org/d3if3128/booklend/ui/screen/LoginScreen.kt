@@ -30,10 +30,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,9 +55,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import org.d3if3128.booklend.R
 import org.d3if3128.booklend.database.BooklendDb
 import org.d3if3128.booklend.navigation.Screen
+import org.d3if3128.booklend.network.UserDataStore
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 import org.d3if3128.booklend.util.ViewModelFactoryUser
 
@@ -67,16 +69,17 @@ import org.d3if3128.booklend.util.ViewModelFactoryUser
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
     val db = BooklendDb.getInstance(context)
-    val factoryUser = ViewModelFactoryUser(db.dao)
+    val dao = db.dao // Dapatkan dao dari BooklendDb
+    val userDataStore = UserDataStore(context)
+    val coroutineScope = rememberCoroutineScope()
+    val factoryUser = ViewModelFactoryUser(dao, userDataStore)
     val viewModel: DetailViewModelUser = viewModel(factory = factoryUser)
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    var loginRequested by remember { mutableStateOf(false) }
-
-    LaunchedEffect(loginRequested) {
-        if (loginRequested) {
+    fun handleLogin() {
+        coroutineScope.launch {
             when {
                 email.isBlank() || password.isBlank() -> {
                     Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
@@ -87,20 +90,14 @@ fun LoginScreen(navController: NavController) {
                 else -> {
                     val user = viewModel.getUserByEmailAndPassword(email, password)
                     if (user != null) {
-                        // Login berhasil
-                        navController.navigate(Screen.UserHome.withIdUser(user.iduser))
+                        userDataStore.saveData(user)
+                        navController.navigate(Screen.UserHome.withEmail(user.email))
                     } else {
-                        // Email terdaftar, tapi password tidak cocok
                         Toast.makeText(context, R.string.password_salah, Toast.LENGTH_LONG).show()
                     }
                 }
             }
-            loginRequested = false
         }
-    }
-
-    val loginAction: () -> Unit = {
-        loginRequested = true
     }
 
     Scaffold(
@@ -120,13 +117,12 @@ fun LoginScreen(navController: NavController) {
             onEmailChange = { email = it },
             password = password,
             onPasswordChange = { password = it },
-            loginButton = loginAction,
+            loginButton = { handleLogin() },
             modifier = Modifier.padding(padding),
             navController = navController,
         )
     }
 }
-
 
 @Composable
 fun FormLogin(
@@ -134,7 +130,7 @@ fun FormLogin(
     onEmailChange: (String) -> Unit,
     password: String,
     onPasswordChange: (String) -> Unit,
-    loginButton : () -> Unit,
+    loginButton: () -> Unit,
     modifier: Modifier,
     navController: NavController,
 ) {
@@ -146,7 +142,7 @@ fun FormLogin(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp,  Alignment.Top),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -185,8 +181,8 @@ fun FormLogin(
             label = { Text(text = "Password") },
             singleLine = true,
             visualTransformation =
-                if (passwordVisible) VisualTransformation.None
-                else PasswordVisualTransformation(),
+            if (passwordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
@@ -298,7 +294,6 @@ fun FormLogin(
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

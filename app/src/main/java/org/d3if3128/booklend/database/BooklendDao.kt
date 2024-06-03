@@ -22,6 +22,9 @@ interface BooklendDao {
     @Query("SELECT * FROM buku WHERE idbuku = :idbuku")
     suspend fun getBukuById(idbuku: Long): Buku?
 
+    @Query("SELECT * FROM user WHERE iduser = :iduser")
+    suspend fun getUserById(iduser: Long): User?
+
     @Query("DELETE FROM buku WHERE idbuku = :idbuku")
     suspend fun deleteById(idbuku: Long)
 
@@ -33,11 +36,8 @@ interface BooklendDao {
     @Query("SELECT * FROM user WHERE email = :email LIMIT 1")
     suspend fun getUserByEmail(email: String): User?
 
-
     @Query("SELECT * FROM user ORDER BY tanggalbuatakun")
     fun getUser(): Flow<List<User>>
 
-    @Query("SELECT * FROM user WHERE iduser = :iduser")
-    suspend fun getUserById(iduser: Long): User?
 
 }
