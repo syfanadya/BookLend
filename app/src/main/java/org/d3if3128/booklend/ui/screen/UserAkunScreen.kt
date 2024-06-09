@@ -27,6 +27,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -42,7 +43,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -63,7 +63,7 @@ import org.d3if3128.booklend.ui.theme.BookLendTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserAkunScreen(navController: NavController, user: User? = null) {
+fun UserAkunScreen(navController: NavController) {
 
     val context = LocalContext.current
     val dataStore = UserDataStore(context)
@@ -192,12 +192,13 @@ fun UserAkunScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(109.dp)
-                    .shadow(
-                        elevation = 20.dp,
-                        spotColor = Color(0x33000000),
-                        ambientColor = Color(0x33000000)
-                    )
-                    .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 10.dp))
+                    .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 10.dp)),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White,
+                )
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -205,6 +206,13 @@ fun UserAkunScreenContent(
                         .fillMaxSize()
                         .padding(16.dp) // Pastikan row mengisi penuh ukuran card dan beri padding agar tidak menempel ke tepi
                 ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_account_circle_24), // Ganti dengan ID resource logo Anda
+                        contentDescription = null,
+                        modifier = Modifier.size(80.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
                     Column(
                         verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
