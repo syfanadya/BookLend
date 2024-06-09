@@ -47,7 +47,6 @@ fun UbahProfil(navController: NavHostController, iduser: Long? = null) {
     val db = BooklendDb.getInstance(context)
     val dao = db.dao // Dapatkan dao dari BooklendDb
     val userDataStore = UserDataStore(context)
-    val coroutineScope = rememberCoroutineScope()
     val factoryUser = ViewModelFactoryUser(dao, userDataStore)
     val viewModel: DetailViewModelUser = viewModel(factory = factoryUser)
 

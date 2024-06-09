@@ -16,12 +16,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -30,14 +29,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -46,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -57,11 +56,27 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.R
+import org.d3if3128.booklend.model.User
 import org.d3if3128.booklend.navigation.Screen
+import org.d3if3128.booklend.network.UserDataStore
 import org.d3if3128.booklend.ui.theme.BookLendTheme
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AkunScreen(navController: NavController) {
+fun AdminAkunScreen(navController: NavController, user: User? = null) {
+
+    val context = LocalContext.current
+    val dataStore = UserDataStore(context)
+
+    val userData by dataStore.userFlow.collectAsState(initial = User(
+        namalengkap = "",
+        nohp = "",
+        usia = "",
+        email = "",
+        password = "",
+        tanggalbuatakun = ""
+    ))
+
     val items = listOf(
         BottomNavigationItem(
             title = "Beranda",
@@ -70,11 +85,10 @@ fun AkunScreen(navController: NavController) {
             hasNews = false
         ),
         BottomNavigationItem(
-            title = "Notifikasi",
-            selectedIcon = Icons.Filled.Notifications,
-            unselectedIcon = Icons.Outlined.Notifications,
-            hasNews = false,
-            badgeCount = 45
+            title = "Peminjaman",
+            selectedIcon = Icons.Filled.Email,
+            unselectedIcon = Icons.Outlined.Email,
+            hasNews = false
         ),
         BottomNavigationItem(
             title = "Akun",
@@ -84,80 +98,80 @@ fun AkunScreen(navController: NavController) {
         )
     )
 
-    var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+        var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    // Observe the current back stack entry and update the selected item index accordingly
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    LaunchedEffect(currentBackStackEntry) {
-        selectedItemIndex = when (currentBackStackEntry?.destination?.route) {
-            Screen.AdminHome.route -> 0
-            Screen.Akun.route -> 2 // Set the index to match the "Akun" page
-            else -> 0
+        // Observe the current back stack entry and update the selected item index accordingly
+        val currentBackStackEntry by navController.currentBackStackEntryAsState()
+        LaunchedEffect(currentBackStackEntry) {
+            selectedItemIndex = when (currentBackStackEntry?.destination?.route) {
+                Screen.AdminDaftarPeminjaman.route -> 1
+                Screen.AdminAkun.route -> 2 // Set the index to match the "Akun" page
+                else -> 0
+            }
         }
-    }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
-        },
-        bottomBar = {
-            NavigationBar {
-                items.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        selected = selectedItemIndex == index,
-                        onClick = {
-                            selectedItemIndex = index
-                            when (index) {
-                                0 -> navController.navigate(Screen.AdminHome.route)
-                                1 -> navController.navigate(Screen.Akun.route) // Ensure this route exists
-                                2 -> navController.navigate(Screen.Akun.route)
-                            }
-                        },
-                        label = {
-                            Text(text = item.title)
-                        },
-                        icon = {
-                            BadgedBox(
-                                badge = {
-                                    if (item.badgeCount != null) {
-                                        Badge {
-                                            Text(text = item.badgeCount.toString())
-                                        }
-                                    } else if (item.hasNews) {
-                                        Badge()
-                                    }
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    items.forEachIndexed { index, item ->
+                        NavigationBarItem(
+                            selected = selectedItemIndex == index,
+                            onClick = {
+                                selectedItemIndex = index
+                                when (index) {
+                                    0 -> navController.navigate(Screen.AdminHome.route)
+                                    1 -> navController.navigate(Screen.AdminDaftarPeminjaman.route)
+                                    2 -> navController.navigate(Screen.AdminAkun.route)
                                 }
-                            ) {
-                                Icon(
-                                    imageVector = if (index == selectedItemIndex) {
-                                        item.selectedIcon
-                                    } else item.unselectedIcon,
-                                    contentDescription = item.title,
-                                    tint = Color(0xFF2587DC)
-                                )
+                            },
+                            label = {
+                                Text(text = item.title)
+                            },
+                            icon = {
+                                BadgedBox(
+                                    badge = {
+                                        if (item.badgeCount != null) {
+                                            Badge {
+                                                Text(text = item.badgeCount.toString())
+                                            }
+                                        } else if (item.hasNews) {
+                                            Badge()
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = if (index == selectedItemIndex) {
+                                            item.selectedIcon
+                                        } else item.unselectedIcon,
+                                        contentDescription = item.title,
+                                        tint = Color(0xFF2587DC)
+                                    )
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
-        },
-    ) { padding ->
-        AkunScreenContent(
-            Modifier.padding(padding),
-            navController = navController,
-        )
-    }
+        ) { padding ->
+            AdminAkunScreenContent(
+                modifier = Modifier.padding(padding),
+                navController = navController,
+                email = userData.email,
+                fullname = userData.namalengkap,
+                noPhone = userData.nohp,
+            )
+        }
+
 }
 
 @Composable
-fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavController) {
+fun AdminAkunScreenContent(
+    modifier: Modifier,
+    email: String,
+    fullname: String,
+    noPhone: String,
+    navController: NavController
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -192,7 +206,7 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                            text = "Admin BookLend",
+                            text = fullname,
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 lineHeight = 24.sp,
@@ -202,7 +216,17 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
                             )
                         )
                         Text(
-                            text = "bookl@gmail.com",
+                            text = email,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 24.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF49454F),
+                                letterSpacing = 0.5.sp,
+                            )
+                        )
+                        Text(
+                            text = noPhone,
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 24.sp,
@@ -273,7 +297,7 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
         ) {
             Button(
                 onClick = {
-                    // Tambahkan aksi yang diinginkan di sini
+                    navController.navigate(Screen.Home2.route) 
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier
@@ -318,9 +342,9 @@ fun AkunScreenContent(modifier: Modifier = Modifier, navController: NavControlle
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun AkunScreenPreview() {
+fun AdminAkunScreenPreview() {
     BookLendTheme {
-        AkunScreen(rememberNavController())
+        UserAkunScreen(rememberNavController())
     }
 }
 

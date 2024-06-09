@@ -5,14 +5,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,23 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,7 +59,7 @@ fun AdminDetailBuku(navController: NavHostController, idbuku: Long? = null) {
         imageUri = uri
     }
 
-    LaunchedEffect(true){
+    LaunchedEffect(idbuku) {
         if (idbuku == null) return@LaunchedEffect
         val dataBuku = viewModel.getBuku(idbuku) ?: return@LaunchedEffect
         imageUri = if (dataBuku.gambarbuku.isNotEmpty()) Uri.parse(dataBuku.gambarbuku) else null
@@ -97,10 +75,7 @@ fun AdminDetailBuku(navController: NavHostController, idbuku: Long? = null) {
         topBar = {
             TopAppBar(
                 title = {
-                    if (idbuku == null)
-                        Text(text = stringResource(id = R.string.tambah_buku))
-                    else
-                        Text(text = stringResource(id = R.string.edit_buku))
+                    Text(text = if (idbuku == null) stringResource(id = R.string.tambah_buku) else stringResource(id = R.string.edit_buku))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -109,27 +84,25 @@ fun AdminDetailBuku(navController: NavHostController, idbuku: Long? = null) {
                 },
                 actions = {
                     IconButton(onClick = {
-                        if(imageUri.toString() == "" || judul == "" || genre == "" || penulis == ""
-                            || tahunterbit == "" || jumlah == "" || deskripsi == "" ){
+                        if (imageUri.toString().isEmpty() || judul.isEmpty() || genre.isEmpty() || penulis.isEmpty() ||
+                            tahunterbit.isEmpty() || jumlah.isEmpty() || deskripsi.isEmpty()) {
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
-                        if (idbuku == null){
-                            viewModel.insert(imageUri.toString(), judul, genre, penulis, tahunterbit,
-                                jumlah.toInt(), deskripsi)
+                        if (idbuku == null) {
+                            viewModel.insert(imageUri.toString(), judul, genre, penulis, tahunterbit, jumlah.toInt(), deskripsi)
                         } else {
-                            viewModel.update(idbuku, imageUri.toString(), judul, genre, penulis,
-                                tahunterbit, jumlah.toInt(), deskripsi)
+                            viewModel.update(idbuku, imageUri.toString(), judul, genre, penulis, tahunterbit, jumlah.toInt(), deskripsi)
                         }
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.Outlined.Check, 
+                            imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(R.string.simpan),
                             tint = Color(0xFF2587DC)
                         )
                     }
-                    if (idbuku != null){
+                    if (idbuku != null) {
                         DeleteAction {
                             viewModel.delete(idbuku)
                             navController.popBackStack()
@@ -160,27 +133,42 @@ fun AdminDetailBuku(navController: NavHostController, idbuku: Long? = null) {
 }
 
 @Composable
-fun DeleteAction(delete: () -> Unit){
+fun DeleteAction(delete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     IconButton(onClick = { expanded = true }) {
-        Icon(imageVector = Icons.Filled.MoreVert,
-            contentDescription = stringResource(R.string.lainnya),
-            tint = Color(0xFF2587DC)
-        )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
+        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = stringResource(R.string.lainnya), tint = Color(0xFF2587DC))
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(
-                text = {
-                       Text(text = stringResource(id = R.string.hapus))
-                },
+                text = { Text(text = stringResource(id = R.string.hapus)) },
                 onClick = {
                     expanded = false
-                    delete()
-                })
+                    showDialog = true
+                }
+            )
         }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = stringResource(id = R.string.konfirmasi_hapus)) },
+            text = { Text(text = stringResource(id = R.string.pesan_konfirmasi_hapus)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    delete()
+                }) {
+                    Text(text = stringResource(id = R.string.ya))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(text = stringResource(id = R.string.tidak))
+                }
+            }
+        )
     }
 }
 

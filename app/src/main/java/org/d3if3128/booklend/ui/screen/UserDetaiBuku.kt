@@ -1,6 +1,7 @@
 package org.d3if3128.booklend.ui.screen
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,16 +50,32 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import org.d3if3128.booklend.R
 import org.d3if3128.booklend.database.BooklendDb
+import org.d3if3128.booklend.model.User
+import org.d3if3128.booklend.navigation.Screen
+import org.d3if3128.booklend.network.UserDataStore
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 import org.d3if3128.booklend.util.ViewModelFactoryBuku
+import org.d3if3128.booklend.util.ViewModelFactoryPeminjaman
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDetailBuku(navController: NavHostController, idbuku: Long? = null) {
+fun UserDetailBuku(navController: NavHostController, idbuku: Long? = null, user: User? = null) {
     val context = LocalContext.current
     val db = BooklendDb.getInstance(context)
     val factoryBuku = ViewModelFactoryBuku(db.dao)
     val viewModel: DetailViewModelBuku = viewModel(factory = factoryBuku)
+    val factoryPeminjaman = ViewModelFactoryPeminjaman(db.dao)
+    val viewModelPeminjaman: DetailViewModelPeminjaman = viewModel(factory = factoryPeminjaman)
+
+    val dataStore = UserDataStore(context)
+    val userData = user ?: dataStore.userFlow.collectAsState(initial = User(
+        email = "",
+        namalengkap = "",
+        nohp = "",
+        usia = "",
+        password = "",
+        tanggalbuatakun = ""
+    )).value
 
     var judul by remember { mutableStateOf("") }
     var genre by remember { mutableStateOf("") }
@@ -66,6 +84,26 @@ fun UserDetailBuku(navController: NavHostController, idbuku: Long? = null) {
     var jumlah by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    var borrowRequested by remember { mutableStateOf(false) }
+
+    LaunchedEffect(borrowRequested) {
+        if (borrowRequested) {
+            if (idbuku != null) {
+                val status = "Menunggu Persetujuan"
+                val tanggalkembali: String? = null
+                viewModelPeminjaman.insert(userData.iduser, idbuku, status, tanggalkembali)
+                Toast.makeText(context, "Peminjaman berhasil", Toast.LENGTH_SHORT).show()
+                navController.navigate(Screen.UserRiwayat.route)
+            } else {
+                navController.navigate("${Screen.UserDetailBuku.route}/$idbuku")
+            }
+            borrowRequested = false
+        }
+    }
+    val borrowAction: () -> Unit = {
+        borrowRequested = true
+    }
 
     LaunchedEffect(true) {
         if (idbuku == null) return@LaunchedEffect
@@ -104,7 +142,12 @@ fun UserDetailBuku(navController: NavHostController, idbuku: Long? = null) {
             stock = jumlah,
             desc = deskripsi,
             imageUri = imageUri,
+            email = userData.email,
+            fullname = userData.namalengkap,
+            noPhone = userData.nohp,
+            borrowButton = borrowAction,
             modifier = Modifier.padding(padding)
+
         )
     }
 }
@@ -118,6 +161,10 @@ fun ReadOnlyBookDetails(
     stock: String,
     desc: String,
     imageUri: Uri?,
+    email: String,
+    fullname: String,
+    noPhone: String,
+    borrowButton : () -> Unit,
     modifier: Modifier
 ) {
     Column(
@@ -139,7 +186,9 @@ fun ReadOnlyBookDetails(
                 contentScale = ContentScale.FillBounds
             )
         }
-
+        Text(text = email)
+        Text(text = fullname)
+        Text(text = noPhone)
         Text(
             text = title,
             style = TextStyle(
@@ -186,7 +235,7 @@ fun ReadOnlyBookDetails(
         )
 
         Button(
-            onClick = {},
+            onClick = borrowButton,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2587DC)),
             modifier = Modifier
                 .fillMaxWidth()

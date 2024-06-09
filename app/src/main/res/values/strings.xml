@@ -67,4 +67,11 @@
     <string name="password_salah">Password salah</string>
     <string name="detail_buku">Detail Buku</string>
     <string name="ubah_profile">Ubah Profil</string>
+    <string name="riwayat_kosong">Riwayat Kosong</string>
+    <string name="riwayat">Riwayat</string>
+    <string name="detail_peminjaman">Detail Peminjaman</string>
+    <string name="konfirmasi_hapus">Konfirmasi Penghapusan</string>
+    <string name="pesan_konfirmasi_hapus">Apakah anda yakin untuk menghapus ?</string>
+    <string name="ya">Ya</string>
+    <string name="tidak">Tidak</string>
 </resources>

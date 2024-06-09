@@ -104,7 +104,7 @@ fun UserAkunScreen(navController: NavController, user: User? = null) {
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
         LaunchedEffect(currentBackStackEntry) {
             selectedItemIndex = when (currentBackStackEntry?.destination?.route) {
-                Screen.UserHome.route -> 0
+                Screen.UserRiwayat.route -> 1
                 Screen.UserAkun.route -> 2 // Set the index to match the "Akun" page
                 else -> 0
             }
@@ -347,7 +347,7 @@ fun UserAkunScreenContent(
         ) {
             Button(
                 onClick = {
-                    // Tambahkan aksi yang diinginkan di sini
+                    navController.navigate(Screen.Home2.route) 
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier

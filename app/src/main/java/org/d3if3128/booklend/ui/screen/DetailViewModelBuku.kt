@@ -1,5 +1,6 @@
 package org.d3if3128.booklend.ui.screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +63,13 @@ class DetailViewModelBuku(private val dao: BooklendDao): ViewModel() {
 
     fun delete(idbuku: Long){
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteById(idbuku)
+            val buku = dao.getBukuById(idbuku)
+            if (buku != null) {
+                dao.deleteById(idbuku)
+                Log.d("DetailViewModelBuku", "Buku dengan ID: $idbuku berhasil dihapus")
+            } else {
+                Log.d("DetailViewModelBuku", "Buku dengan ID: $idbuku tidak ditemukan")
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package org.d3if3128.booklend.navigation
 
 import org.d3if3128.booklend.ui.screen.KEY_EMAIL_USER
 import org.d3if3128.booklend.ui.screen.KEY_ID_BUKU
+import org.d3if3128.booklend.ui.screen.KEY_ID_PEMINJAMAN
 import org.d3if3128.booklend.ui.screen.KEY_ID_USER
 
 sealed class Screen(val route: String) {
@@ -9,8 +10,9 @@ sealed class Screen(val route: String) {
     data object Home2: Screen("mainscreen2")
     data object Login: Screen("loginscreen")
     data object Register: Screen("registerscreen")
-    data object Akun: Screen("akun")
+    data object AdminDaftarPeminjaman: Screen("akun")
     data object UserAkun: Screen("userAkun")
+    data object AdminAkun: Screen("adminAkun")
     data object About: Screen("about")
     data object AdminLogin: Screen("adminlogin")
 //    data object AdminHome: Screen("adminhome")
@@ -22,6 +24,9 @@ sealed class Screen(val route: String) {
     data object UbahProfil: Screen("ubahProfilScreen/{$KEY_ID_USER}"){
         fun withIdUser(idUser: Long) = "ubahProfilScreen/$idUser"
     }
+    data object AdminDetailPeminjaman: Screen("detailPeminjamanScreen/{$KEY_ID_PEMINJAMAN}"){
+        fun withIdPeminjaman(idPeminjaman: Long) = "detailPeminjamanScreen/$idPeminjaman"
+    }
     data object AdminHome: Screen("adminhome/{$KEY_EMAIL_USER}"){
         fun withEmail(email: String) = "adminhome/$email"
     }
@@ -31,4 +36,6 @@ sealed class Screen(val route: String) {
     data object UserDetailBuku: Screen("userDetailBukuScreen/{$KEY_ID_BUKU}"){
         fun withIdBuku(idBuku: Long) = "userDetailBukuScreen/$idBuku"
     }
+
+    data object UserRiwayat: Screen("userRiwayat")
 }
