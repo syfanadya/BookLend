@@ -323,4 +323,3 @@ fun AdminAkunScreenPreview() {
         UserAkunScreen(rememberNavController())
     }
 }
-

@@ -40,7 +40,6 @@ import org.d3if3128.booklend.R
 import org.d3if3128.booklend.navigation.Screen
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 
-
 @Composable
 fun MainScreen2(navController: NavHostController) {
     // Scaffold with ScreenContent
@@ -53,7 +52,6 @@ fun MainScreen2(navController: NavHostController) {
         ScreenContent2(navController = navController, modifier = Modifier.padding(padding))
     }
 }
-
 
 @Composable
 fun ScreenContent2(navController: NavHostController,modifier: Modifier) {
@@ -170,10 +168,6 @@ fun ScreenContent2(navController: NavHostController,modifier: Modifier) {
         }
     }
 }
-
-
-
-
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

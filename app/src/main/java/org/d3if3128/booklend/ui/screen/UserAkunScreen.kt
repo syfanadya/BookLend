@@ -405,4 +405,3 @@ fun UserAkunScreenPreview() {
         UserAkunScreen(rememberNavController())
     }
 }
-

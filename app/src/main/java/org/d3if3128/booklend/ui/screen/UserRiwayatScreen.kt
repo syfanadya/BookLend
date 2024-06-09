@@ -181,7 +181,6 @@ fun UserRiwayatScreen(navController: NavHostController){
     }
 }
 
-
 @Composable
 fun UserRiwayatScreenContent(
     modifier: Modifier,
@@ -319,4 +318,3 @@ fun UserRiwayatScreenPreview() {
         UserRiwayatScreen(rememberNavController())
     }
 }
-
