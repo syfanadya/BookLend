@@ -207,7 +207,12 @@ fun FormPeminjaman(
     modifier: Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val statusOptions = listOf("Menunggu Persetujuan", "Ditolak", "Selesai")
+    val statusOptions = listOf(
+        "Menunggu Persetujuan",
+        "Ditolak",
+        "Sedang Dipinjam",
+        "Sudah Dikembalikan"
+    )
 
     Column(
         modifier

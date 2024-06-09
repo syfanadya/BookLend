@@ -34,10 +34,6 @@ class DetailViewModelUser(private val dao: BooklendDao,  private val userDataSto
         }
     }
 
-    suspend fun getUser(email: String): User? {
-        return dao.getUserByEmail(email)
-    }
-
     suspend fun getUser2(iduser: Long): User? {
         return dao.getUserById(iduser)
     }
