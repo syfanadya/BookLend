@@ -27,6 +27,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -35,16 +36,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -56,26 +54,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.d3if3128.booklend.R
-import org.d3if3128.booklend.model.User
 import org.d3if3128.booklend.navigation.Screen
-import org.d3if3128.booklend.network.UserDataStore
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminAkunScreen(navController: NavController, user: User? = null) {
-
-    val context = LocalContext.current
-    val dataStore = UserDataStore(context)
-
-    val userData by dataStore.userFlow.collectAsState(initial = User(
-        namalengkap = "",
-        nohp = "",
-        usia = "",
-        email = "",
-        password = "",
-        tanggalbuatakun = ""
-    ))
+fun AdminAkunScreen(navController: NavController) {
 
     val items = listOf(
         BottomNavigationItem(
@@ -156,9 +140,6 @@ fun AdminAkunScreen(navController: NavController, user: User? = null) {
             AdminAkunScreenContent(
                 modifier = Modifier.padding(padding),
                 navController = navController,
-                email = userData.email,
-                fullname = userData.namalengkap,
-                noPhone = userData.nohp,
             )
         }
 
@@ -167,9 +148,6 @@ fun AdminAkunScreen(navController: NavController, user: User? = null) {
 @Composable
 fun AdminAkunScreenContent(
     modifier: Modifier,
-    email: String,
-    fullname: String,
-    noPhone: String,
     navController: NavController
 ) {
     Column(
@@ -188,12 +166,13 @@ fun AdminAkunScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(109.dp)
-                    .shadow(
-                        elevation = 20.dp,
-                        spotColor = Color(0x33000000),
-                        ambientColor = Color(0x33000000)
-                    )
-                    .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 10.dp))
+                    .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 10.dp)),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White,
+                )
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -201,12 +180,19 @@ fun AdminAkunScreenContent(
                         .fillMaxSize()
                         .padding(16.dp) // Pastikan row mengisi penuh ukuran card dan beri padding agar tidak menempel ke tepi
                 ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.logogambar), // Ganti dengan ID resource logo Anda
+                        contentDescription = null,
+                        modifier = Modifier.size(80.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
                     Column(
                         verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                            text = fullname,
+                            text = "Admin Booklend",
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 lineHeight = 24.sp,
@@ -216,17 +202,7 @@ fun AdminAkunScreenContent(
                             )
                         )
                         Text(
-                            text = email,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 24.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF49454F),
-                                letterSpacing = 0.5.sp,
-                            )
-                        )
-                        Text(
-                            text = noPhone,
+                            text = "admin@gmail.com",
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 24.sp,
