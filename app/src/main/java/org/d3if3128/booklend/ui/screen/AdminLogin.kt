@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -118,7 +117,7 @@ fun FormAdminLogin(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(50.dp))
+
         Image(
             modifier = Modifier
                 .width(200.dp)
@@ -127,7 +126,6 @@ fun FormAdminLogin(
             contentDescription = stringResource(id = R.string.logo),
             contentScale = ContentScale.FillBounds,
         )
-        Spacer(modifier = Modifier.height(50.dp))
         Text(
             modifier = Modifier
                 .fillMaxWidth(),

@@ -200,16 +200,16 @@ fun FormLogin(
             },
             modifier = Modifier.fillMaxWidth()
         )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = "Lupa kata sandi ?",
-            style = TextStyle(
-                fontSize = 14.sp,
-                color = Color(0xFFFB344F),
-
-                )
-        )
+//        Text(
+//            modifier = Modifier
+//                .fillMaxWidth(),
+//            text = "Lupa kata sandi ?",
+//            style = TextStyle(
+//                fontSize = 14.sp,
+//                color = Color(0xFFFB344F),
+//
+//                )
+//        )
         Button(
             onClick = loginButton,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2587DC)),
