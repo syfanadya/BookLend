@@ -3,10 +3,12 @@ package org.d3if3128.booklend.ui.screen
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -27,6 +30,8 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -38,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -69,11 +75,9 @@ import org.d3if3128.booklend.util.ViewModelFactoryPeminjaman
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserRiwayatScreen(navController: NavHostController){
-
+fun UserRiwayatScreen(navController: NavHostController) {
     val context = LocalContext.current
     val dataStore = UserDataStore(context)
-
     val userData by dataStore.userFlow.collectAsState(initial = User(
         namalengkap = "",
         nohp = "",
@@ -82,7 +86,6 @@ fun UserRiwayatScreen(navController: NavHostController){
         password = "",
         tanggalbuatakun = ""
     ))
-
 
     val items = listOf(
         UserBottomNavigationItem(
@@ -107,12 +110,11 @@ fun UserRiwayatScreen(navController: NavHostController){
 
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    // Observe the current back stack entry and update the selected item index accordingly
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     LaunchedEffect(currentBackStackEntry) {
         selectedItemIndex = when (currentBackStackEntry?.destination?.route) {
             Screen.UserAkun.route -> 2
-            Screen.UserRiwayat.route -> 1 // Set the index to match the "Akun" page
+            Screen.UserRiwayat.route -> 1
             else -> 0
         }
     }
@@ -132,7 +134,7 @@ fun UserRiwayatScreen(navController: NavHostController){
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(containerColor = Color(0xFFE5F0FE)) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedItemIndex == index,
@@ -140,20 +142,16 @@ fun UserRiwayatScreen(navController: NavHostController){
                             selectedItemIndex = index
                             when (index) {
                                 0 -> navController.navigate(Screen.UserHome.route)
-                                1 -> navController.navigate(Screen.UserRiwayat.route) // Ensure this route exists
+                                1 -> navController.navigate(Screen.UserRiwayat.route)
                                 2 -> navController.navigate(Screen.UserAkun.route)
                             }
                         },
-                        label = {
-                            Text(text = item.title)
-                        },
+                        label = { Text(text = item.title) },
                         icon = {
                             BadgedBox(
                                 badge = {
                                     if (item.badgeCount != null) {
-                                        Badge {
-                                            Text(text = item.badgeCount.toString())
-                                        }
+                                        Badge { Text(text = item.badgeCount.toString()) }
                                     } else if (item.hasNews) {
                                         Badge()
                                     }
@@ -176,15 +174,17 @@ fun UserRiwayatScreen(navController: NavHostController){
         UserRiwayatScreenContent(
             modifier = Modifier.padding(padding),
             userEmail = userData.email,
+            navController = navController
         )
-
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserRiwayatScreenContent(
     modifier: Modifier,
     userEmail: String,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val db = BooklendDb.getInstance(context)
@@ -194,23 +194,57 @@ fun UserRiwayatScreenContent(
 
     val filteredPeminjaman = datapeminjaman.filter { it.user.email == userEmail }
 
-    if (filteredPeminjaman.isEmpty()) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    var selectedFilter by rememberSaveable { mutableStateOf("Semua") }
+    val filteredStatusPeminjaman = when (selectedFilter) {
+        "Diproses" -> filteredPeminjaman.filter { it.peminjaman.status == "Menunggu Persetujuan" }
+        "Ditolak" -> filteredPeminjaman.filter { it.peminjaman.status == "Ditolak" }
+        "Dipinjam" -> filteredPeminjaman.filter { it.peminjaman.status == "Sedang Dipinjam" }
+        "Dikembalikan" -> filteredPeminjaman.filter { it.peminjaman.status == "Sudah Dikembalikan" }
+        else -> filteredPeminjaman
+    }
+
+    Column(modifier = modifier.padding(16.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.riwayat_kosong))
+            listOf("Semua", "Diproses", "Ditolak", "Dipinjam", "Dikembalikan").forEach { filter ->
+                FilterChip(
+                    selected = selectedFilter == filter,
+                    onClick = { selectedFilter = filter },
+                    label = { Text(filter) },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = Color(0xFF2587DC),
+                        selectedLabelColor = Color.White,
+                        containerColor = Color.White,
+                        labelColor = Color(0xFF2587DC)
+                    ),
+                    border = FilterChipDefaults.filterChipBorder(borderColor = Color(0xFF2587DC))
+                )
+            }
         }
-    } else {
-        LazyColumn(
-            modifier = modifier,
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            items(filteredPeminjaman) { peminjamanWithDetails ->
-                ListPeminjaman(peminjamanWithDetails)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (filteredStatusPeminjaman.isEmpty()) {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(R.string.riwayat_kosong))
+            }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(top = 8.dp)
+            ) {
+                items(filteredStatusPeminjaman) { peminjamanWithDetails ->
+                    ListPeminjaman(peminjamanWithDetails)
+                }
             }
         }
     }
@@ -227,12 +261,8 @@ fun ListPeminjaman(peminjamanWithDetails: PeminjamanWithDetails) {
         modifier = Modifier
             .padding(bottom = 16.dp)
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp,
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(
@@ -289,7 +319,7 @@ fun ListPeminjaman(peminjamanWithDetails: PeminjamanWithDetails) {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "Judul Buku : " + buku.judulbuku,
+                        text = buku.judulbuku,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.Bold
@@ -297,19 +327,51 @@ fun ListPeminjaman(peminjamanWithDetails: PeminjamanWithDetails) {
                     Text(
                         text = "Penulis : " + buku.penulisbuku,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        ),
                     )
                     Text(
                         text = "Genre : " + buku.genrebuku,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        ),
                     )
-                    Text(text = "Tanggal Peminjaman : " + peminjaman.tanggalpinjam)
+                    Text(
+                        text = "Tgl Pinjam : " + peminjaman.tanggalpinjam,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        )
+                    )
+                    peminjaman.tanggalkembali?.let { tanggalKembali ->
+                        Text(
+                            text = "Tgl Kembali : $tanggalKembali",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                lineHeight = 22.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF9D9EA8),
+                            )
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable

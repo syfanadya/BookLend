@@ -112,7 +112,7 @@ fun UserAkunScreen(navController: NavController) {
 
         Scaffold(
             bottomBar = {
-                NavigationBar {
+                NavigationBar( containerColor = Color(0xFFE5F0FE)) {
                     items.forEachIndexed { index, item ->
                         NavigationBarItem(
                             selected = selectedItemIndex == index,
@@ -120,7 +120,7 @@ fun UserAkunScreen(navController: NavController) {
                                 selectedItemIndex = index
                                 when (index) {
                                     0 -> navController.navigate(Screen.UserHome.route)
-                                    1 -> navController.navigate(Screen.UserAkun.route) // Ensure this route exists
+                                    1 -> navController.navigate(Screen.UserRiwayat.route) // Ensure this route exists
                                     2 -> navController.navigate(Screen.UserAkun.route)
                                 }
                             },
@@ -179,7 +179,8 @@ fun UserAkunScreenContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

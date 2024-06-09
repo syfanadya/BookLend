@@ -161,7 +161,7 @@ fun BorrowDeleteAction(delete: () -> Unit) {
             contentDescription = stringResource(R.string.lainnya), tint = Color(0xFF2587DC))
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(
-                text = { Text(text = stringResource(id = R.string.hapus)) },
+                text = { Text(text = stringResource(id = R.string.hapus_peminjaman)) },
                 onClick = {
                     expanded = false
                     showDialog = true

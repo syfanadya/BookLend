@@ -153,7 +153,8 @@ fun AdminAkunScreenContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -273,7 +274,7 @@ fun AdminAkunScreenContent(
         ) {
             Button(
                 onClick = {
-                    navController.navigate(Screen.Home2.route) 
+                    navController.navigate(Screen.Home2.route)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier

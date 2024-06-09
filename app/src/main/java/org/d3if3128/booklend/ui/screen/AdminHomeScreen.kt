@@ -332,11 +332,11 @@ fun ListBuku(buku: Buku, onClick: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = buku.genrebuku,
+                text = "Genre : " + buku.genrebuku,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(text = buku.jumlahbuku.toString())
+            Text(text = "Stok : " + buku.jumlahbuku.toString())
         }
     }
 }

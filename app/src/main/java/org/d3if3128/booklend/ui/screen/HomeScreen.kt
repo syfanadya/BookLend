@@ -120,7 +120,7 @@ fun HomeScreen(navController: NavHostController, user: User? = null) {
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar( containerColor = Color(0xFFE5F0FE)) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedItemIndex == index,
@@ -165,6 +165,7 @@ fun HomeScreen(navController: NavHostController, user: User? = null) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserHomeScreenContent(
     showListBuku: Boolean,
@@ -204,9 +205,14 @@ fun UserHomeScreenContent(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 placeholder = { Text(text = "Search") },
-                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon", tint = Color(0xFF2587DC)) },
+                leadingIcon = { Icon(Icons.Filled.Search,
+                contentDescription = "Search Icon",
+                tint = Color(0xFF2587DC)) },
                 textStyle = TextStyle(color = Color(0xFF2587DC)),
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color(0xFFE5F0FE) // Warna latar belakang TextField
+                ),
             )
             if (showListBuku) {
                 LazyColumn(
@@ -270,11 +276,11 @@ fun ListBuku2(buku: Buku, onClick: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = buku.genrebuku,
+                text = "Genre : " + buku.genrebuku,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(text = buku.jumlahbuku.toString())
+            Text(text = "Stok : " + buku.jumlahbuku.toString())
         }
     }
 }
@@ -290,13 +296,17 @@ fun GridBuku2(buku: Buku, onClick: () -> Unit) {
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val imageUri = Uri.parse(buku.gambarbuku)
             Image(
                 painter = rememberAsyncImagePainter(model = imageUri),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp),
+                modifier = Modifier
+                    .width(71.dp)
+                    .height(108.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.FillBounds
             )
             Text(
@@ -306,11 +316,11 @@ fun GridBuku2(buku: Buku, onClick: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = buku.genrebuku,
+                text = "Genre : " + buku.genrebuku,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(text = buku.jumlahbuku.toString())
+            Text(text = "Stok : " + buku.jumlahbuku.toString())
         }
     }
 }
