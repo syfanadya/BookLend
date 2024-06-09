@@ -197,6 +197,8 @@ fun DataPeminjamanBuku(peminjamanWithDetails: PeminjamanWithDetails, onClick: (L
     val peminjaman = peminjamanWithDetails.peminjaman
     val buku = peminjamanWithDetails.buku
 
+    val statusTextColor = if (peminjaman.status == "Ditolak") Color.Red else Color(0xFF2587DC)
+
     Card(
         modifier = Modifier
             .clickable { onClick(peminjaman.idpeminjaman) }
@@ -227,8 +229,8 @@ fun DataPeminjamanBuku(peminjamanWithDetails: PeminjamanWithDetails, onClick: (L
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF2587DC),
-                        )
+                        color = statusTextColor,
+                    )
                 )
                 Text(
                     text = "Kode Pinjam : " + peminjaman.idpeminjaman.toString(),
