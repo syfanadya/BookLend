@@ -83,7 +83,7 @@ fun ScreenContent(modifier: Modifier) {
                 .padding(8.dp),
             contentScale = ContentScale.Fit
         )
-        val imagePainterr: Painter = painterResource(id = R.drawable.logo_booklend_text)
+        val imagePainterr: Painter = painterResource(id = R.drawable.logoversii2)
         Image(
             painter = imagePainterr,
             contentDescription = "Logo",

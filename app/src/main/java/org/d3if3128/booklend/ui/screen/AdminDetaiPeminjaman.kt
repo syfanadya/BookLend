@@ -14,7 +14,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,6 +63,7 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
     var kodePeminjaman by remember { mutableStateOf("") }
     var peminjam by remember { mutableStateOf("N/A") }
     var usiaPeminjam by remember { mutableStateOf("N/A") }
+    var noHpPeminjam by remember { mutableStateOf("N/A") }
     var judulBuku by remember { mutableStateOf("N/A") }
     var genre by remember { mutableStateOf("N/A") }
     var status by remember { mutableStateOf("N/A") }
@@ -74,6 +78,7 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
             kodePeminjaman = dataPeminjaman.peminjaman.idpeminjaman.toString()
             peminjam = dataPeminjaman.user.namalengkap
             usiaPeminjam = dataPeminjaman.user.usia
+            noHpPeminjam = dataPeminjaman.user.nohp
             judulBuku = dataPeminjaman.buku.judulbuku
             genre = dataPeminjaman.buku.genrebuku
             status = dataPeminjaman.peminjaman.status
@@ -112,6 +117,13 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
                             contentDescription = stringResource(R.string.simpan),
                             tint = Color(0xFF2587DC)
                         )
+
+                    }
+                    if (idpeminjaman != null) {
+                        BorrowDeleteAction {
+                            viewModel.delete(idpeminjaman)
+                            navController.popBackStack()
+                        }
                     }
                 }
             )
@@ -122,6 +134,7 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
                 borrowCode = kodePeminjaman.toLong(),
                 borrower = peminjam,
                 age = usiaPeminjam,
+                noPhone = noHpPeminjam,
                 title = judulBuku,
                 genre = genre,
                 status = status,
@@ -137,12 +150,54 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
     }
 }
 
+@Composable
+fun BorrowDeleteAction(delete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = true }) {
+        Icon(imageVector = Icons.Filled.MoreVert,
+            contentDescription = stringResource(R.string.lainnya), tint = Color(0xFF2587DC))
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            DropdownMenuItem(
+                text = { Text(text = stringResource(id = R.string.hapus)) },
+                onClick = {
+                    expanded = false
+                    showDialog = true
+                }
+            )
+        }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = stringResource(id = R.string.konfirmasi_hapus)) },
+            text = { Text(text = stringResource(id = R.string.pesan_konfirmasi_hapus)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    delete()
+                }) {
+                    Text(text = stringResource(id = R.string.ya))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(text = stringResource(id = R.string.tidak))
+                }
+            }
+        )
+    }
+}
+
 
 @Composable
 fun FormPeminjaman(
     borrowCode: Long,
     borrower: String,
     age: String,
+    noPhone: String,
     title: String,
     genre: String,
     status: String, onStatusChange: (String) -> Unit,
@@ -181,6 +236,14 @@ fun FormPeminjaman(
             value = age,
             onValueChange = {},
             label = { Text(text = "Usia Peminjam") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = false
+        )
+        OutlinedTextField(
+            value = noPhone,
+            onValueChange = {},
+            label = { Text(text = "No.Hp Peminjam") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             enabled = false

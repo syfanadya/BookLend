@@ -123,7 +123,7 @@ fun FormAdminLogin(
             modifier = Modifier
                 .width(200.dp)
                 .height(50.dp),
-            painter = painterResource(R.drawable.logoversi2),
+            painter = painterResource(R.drawable.logoversii2),
             contentDescription = stringResource(id = R.string.logo),
             contentScale = ContentScale.FillBounds,
         )

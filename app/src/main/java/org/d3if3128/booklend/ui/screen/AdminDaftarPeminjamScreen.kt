@@ -25,6 +25,9 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -47,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -162,6 +166,8 @@ fun AdminDaftarPeminjamScreenContent(
     val viewModel: MainViewModelPeminjaman = viewModel(factory = factoryPeminjaman)
     val datapeminjaman by viewModel.datapeminjaman.collectAsState()
 
+
+
     if (datapeminjaman.isEmpty()) {
         Column(
             modifier = modifier
@@ -193,51 +199,121 @@ fun DataPeminjamanBuku(peminjamanWithDetails: PeminjamanWithDetails, onClick: (L
     val buku = peminjamanWithDetails.buku
     val user = peminjamanWithDetails.user
 
-    Row(
+    Card(
         modifier = Modifier
             .clickable { onClick(peminjaman.idpeminjaman) }
             .padding(16.dp)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val imageUri = Uri.parse(buku.gambarbuku)
-        Image(
-            painter = rememberAsyncImagePainter(model = imageUri),
-            contentDescription = null,
-            modifier = Modifier
-                .width(71.dp)
-                .height(108.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.FillBounds
-        )
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp,
+        ),
+//        colors = CardColors(Color.White),
+        shape = RoundedCornerShape(8.dp)
+    ){
         Column(
             verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
-            Text(text = user.iduser.toString())
-            Text(text = user.email)
-            Text(
-                text = buku.judulbuku,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = buku.penulisbuku,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = buku.genrebuku,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(text = peminjaman.status)
-            Text(text = peminjaman.idpeminjaman.toString())
-            Text(text = peminjaman.tanggalpinjam)
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = peminjaman.status,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 22.sp,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF2587DC),
+                        )
+                )
+                Text(
+                    text = "Kode Pinjam : " + peminjaman.idpeminjaman.toString(),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 22.sp,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF9D9EA8),
+                        textAlign = TextAlign.Right,
+                    )
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val imageUri = Uri.parse(buku.gambarbuku)
+                Image(
+                    painter = rememberAsyncImagePainter(model = imageUri),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(71.dp)
+                        .height(108.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.FillBounds
+                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = buku.judulbuku,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Penulis : " + buku.penulisbuku,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = "Genre : " + buku.genrebuku,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = "Tgl Pinjam : " + peminjaman.tanggalpinjam,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        )
+                    )
+                    Text(
+                        text = "Tgl Kembali : " + peminjaman.tanggalkembali,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF9D9EA8),
+                        )
+                    )
+                }
+            }
         }
+
     }
+
 }
 
 @Preview(showBackground = true)

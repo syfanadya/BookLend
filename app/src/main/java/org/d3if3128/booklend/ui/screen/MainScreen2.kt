@@ -99,7 +99,7 @@ fun ScreenContent2(navController: NavHostController,modifier: Modifier) {
             Spacer(modifier = Modifier.height(32.dp))
 
 
-            val logoTextPainter = painterResource(id = R.drawable.logo_booklend_text)
+            val logoTextPainter = painterResource(id = R.drawable.logoversii2)
             Image(
                 painter = logoTextPainter,
                 contentDescription = "Logo Text",

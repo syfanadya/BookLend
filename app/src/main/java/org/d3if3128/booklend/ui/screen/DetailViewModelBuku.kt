@@ -1,5 +1,8 @@
 package org.d3if3128.booklend.ui.screen
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.d3if3128.booklend.database.BooklendDao
 import org.d3if3128.booklend.model.Buku
+import java.io.File
+import java.io.FileOutputStream
 
 class DetailViewModelBuku(private val dao: BooklendDao): ViewModel() {
 
@@ -71,5 +76,13 @@ class DetailViewModelBuku(private val dao: BooklendDao): ViewModel() {
                 Log.d("DetailViewModelBuku", "Buku dengan ID: $idbuku tidak ditemukan")
             }
         }
+    }
+
+    fun saveImageToInternalStorage(context: Context, bitmap: Bitmap, filename: String): Uri {
+        val file = File(context.filesDir, filename)
+        FileOutputStream(file).use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+        return Uri.fromFile(file)
     }
 }

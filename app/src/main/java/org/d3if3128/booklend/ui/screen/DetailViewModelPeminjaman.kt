@@ -1,5 +1,6 @@
 package org.d3if3128.booklend.ui.screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,18 @@ class DetailViewModelPeminjaman(private val dao: BooklendDao) : ViewModel() {
     fun updatePeminjamanStatus(idpeminjaman: Long, status: String, tanggalKembali: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.updatePeminjamanStatus(idpeminjaman, status, tanggalKembali)
+        }
+    }
+
+    fun delete(idpeminjaman: Long){
+        viewModelScope.launch(Dispatchers.IO) {
+            val peminjaman = dao.getPeminjamanById(idpeminjaman)
+            if (peminjaman != null) {
+                dao.deletePeminjamanById(idpeminjaman)
+                Log.d("DetailViewModelBuku", "Buku dengan ID: $idpeminjaman berhasil dihapus")
+            } else {
+                Log.d("DetailViewModelBuku", "Buku dengan ID: $idpeminjaman tidak ditemukan")
+            }
         }
     }
 

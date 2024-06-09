@@ -140,11 +140,12 @@ fun FormUbahProfil(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Image(
             modifier = Modifier
                 .width(150.dp)
                 .height(150.dp),
-            painter = painterResource(id = R.drawable.profil),
+            painter = painterResource(id = R.drawable.baseline_account_circle_24),
             contentDescription = stringResource(id = R.string.profil),
             contentScale = ContentScale.FillBounds,
         )

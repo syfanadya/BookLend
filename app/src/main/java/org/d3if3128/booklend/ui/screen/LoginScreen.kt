@@ -24,7 +24,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -149,7 +148,7 @@ fun FormLogin(
             modifier = Modifier
                 .width(200.dp)
                 .height(50.dp),
-            painter = painterResource(R.drawable.logoversi2),
+            painter = painterResource(R.drawable.logoversii2),
             contentDescription = stringResource(id = R.string.logo),
             contentScale = ContentScale.FillBounds,
         )
@@ -232,50 +231,50 @@ fun FormLogin(
             verticalAlignment = Alignment.CenterVertically,
         ) {
 
-            Text(
-                text = "Atau masuk dengan",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    lineHeight = 24.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF49454F),
-
-                    letterSpacing = 0.5.sp,
-                )
-            )
-        }
-        OutlinedButton(
-            onClick = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            contentPadding = PaddingValues(),
-            shape = RoundedCornerShape(size = 4.dp)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Image(
-                    modifier = Modifier
-                        .width(16.dp)
-                        .height(16.dp),
-                    painter = painterResource(R.drawable.icon_google),
-                    contentDescription = stringResource(id = R.string.icon_google),
-                    contentScale = ContentScale.FillBounds
-                )
-
-                Text(
-                    text = "Masuk dengan Google",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF222222),
-                    )
-                )
-
-            }
-
+//            Text(
+//                text = "Atau masuk dengan",
+//                style = TextStyle(
+//                    fontSize = 14.sp,
+//                    lineHeight = 24.sp,
+//                    fontWeight = FontWeight(400),
+//                    color = Color(0xFF49454F),
+//
+//                    letterSpacing = 0.5.sp,
+//                )
+//            )
+//        }
+//        OutlinedButton(
+//            onClick = {},
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(56.dp),
+//            contentPadding = PaddingValues(),
+//            shape = RoundedCornerShape(size = 4.dp)
+//        ) {
+//            Row(
+//                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+//                verticalAlignment = Alignment.CenterVertically,
+//            ) {
+//                Image(
+//                    modifier = Modifier
+//                        .width(16.dp)
+//                        .height(16.dp),
+//                    painter = painterResource(R.drawable.icon_google),
+//                    contentDescription = stringResource(id = R.string.icon_google),
+//                    contentScale = ContentScale.FillBounds
+//                )
+//
+//                Text(
+//                    text = "Masuk dengan Google",
+//                    style = TextStyle(
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight(700),
+//                        color = Color(0xFF222222),
+//                    )
+//                )
+//
+//            }
+//
         }
 
         Text(

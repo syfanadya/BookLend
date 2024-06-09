@@ -101,7 +101,7 @@ fun HomeScreen(navController: NavHostController, user: User? = null) {
                         modifier = Modifier
                             .width(200.dp)
                             .height(50.dp),
-                        painter = painterResource(id = R.drawable.logo_booklend_text),
+                        painter = painterResource(id = R.drawable.logoversii2),
                         contentDescription = stringResource(R.string.logo)
                     )
                 },

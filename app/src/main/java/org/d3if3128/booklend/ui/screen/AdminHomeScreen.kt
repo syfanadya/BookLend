@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -124,7 +123,7 @@ fun AdminHomeScreen(navController: NavHostController) {
                         modifier = Modifier
                             .width(200.dp)
                             .height(50.dp),
-                        painter = painterResource(id = R.drawable.logo_booklend_text),
+                        painter = painterResource(id = R.drawable.logoversii2),
                         contentDescription = stringResource(R.string.logo)
                     )
                 },
@@ -344,7 +343,10 @@ fun GridBuku(buku: Buku, onClick: () -> Unit) {
             Image(
                 painter = rememberAsyncImagePainter(model = imageUri),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp), // Adjust the size as needed
+                modifier = Modifier
+                    .width(142.dp)
+                    .height(216.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.FillBounds
             )
             Text(

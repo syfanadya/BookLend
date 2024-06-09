@@ -59,4 +59,6 @@ interface BooklendDao {
             ":tanggalKembali WHERE idpeminjaman = :idpeminjaman")
     suspend fun updatePeminjamanStatus(idpeminjaman: Long, status: String, tanggalKembali: String?)
 
+    @Query("DELETE FROM peminjaman WHERE idpeminjaman = :idpeminjaman")
+    suspend fun deletePeminjamanById(idpeminjaman: Long)
 }

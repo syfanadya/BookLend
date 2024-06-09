@@ -36,6 +36,7 @@ import org.d3if3128.booklend.R
 import org.d3if3128.booklend.database.BooklendDb
 import org.d3if3128.booklend.ui.theme.BookLendTheme
 import org.d3if3128.booklend.util.ViewModelFactoryBuku
+import android.provider.MediaStore
 
 const val KEY_ID_BUKU = "idBuku"
 
@@ -56,7 +57,11 @@ fun AdminDetailBuku(navController: NavHostController, idbuku: Long? = null) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri
+        if (uri != null) {
+            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            val savedUri = viewModel.saveImageToInternalStorage(context, bitmap, "book_cover_${System.currentTimeMillis()}.png")
+            imageUri = savedUri
+        }
     }
 
     LaunchedEffect(idbuku) {
@@ -131,6 +136,8 @@ fun AdminDetailBuku(navController: NavHostController, idbuku: Long? = null) {
         )
     }
 }
+
+
 
 @Composable
 fun DeleteAction(delete: () -> Unit) {

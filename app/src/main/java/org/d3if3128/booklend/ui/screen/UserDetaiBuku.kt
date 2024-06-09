@@ -186,9 +186,6 @@ fun ReadOnlyBookDetails(
                 contentScale = ContentScale.FillBounds
             )
         }
-        Text(text = email)
-        Text(text = fullname)
-        Text(text = noPhone)
         Text(
             text = title,
             style = TextStyle(
