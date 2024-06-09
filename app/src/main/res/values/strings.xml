@@ -60,6 +60,7 @@
     <string name="invalid">Tidak Boleh Kosong</string>
     <string name="lainnya">Opsi lainnya</string>
     <string name="hapus">Hapus Buku</string>
+    <string name="hapus_peminjaman">Hapus Peminjaman</string>
     <string name="ini_icon_keluar">Ini icon keluar</string>
     <string name="password_mismatch">Konfirmasi password tidak cocok</string>
     <string name="email_sudah_terdaftar">Email sudah terdaftar</string>

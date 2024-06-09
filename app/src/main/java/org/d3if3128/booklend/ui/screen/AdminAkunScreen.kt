@@ -112,7 +112,7 @@ fun AdminAkunScreen(navController: NavController, user: User? = null) {
 
         Scaffold(
             bottomBar = {
-                NavigationBar {
+                NavigationBar( containerColor = Color(0xFFE5F0FE)) {
                     items.forEachIndexed { index, item ->
                         NavigationBarItem(
                             selected = selectedItemIndex == index,

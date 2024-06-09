@@ -26,7 +26,6 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -97,7 +96,7 @@ fun AdminDaftarPeminjamScreen(navController: NavHostController){
             TopAppBar(
                 title = {
                     Text(
-                        text = "Daftar Peminjaman",
+                        text = "Peminjaman",
                         style = TextStyle(
                             fontSize = 23.sp,
                             fontWeight = FontWeight.Bold
@@ -107,7 +106,7 @@ fun AdminDaftarPeminjamScreen(navController: NavHostController){
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar( containerColor = Color(0xFFE5F0FE)) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedItemIndex == index,
@@ -197,17 +196,18 @@ fun AdminDaftarPeminjamScreenContent(
 fun DataPeminjamanBuku(peminjamanWithDetails: PeminjamanWithDetails, onClick: (Long) -> Unit) {
     val peminjaman = peminjamanWithDetails.peminjaman
     val buku = peminjamanWithDetails.buku
-    val user = peminjamanWithDetails.user
 
     Card(
         modifier = Modifier
             .clickable { onClick(peminjaman.idpeminjaman) }
-            .padding(16.dp)
+            .padding(bottom = 16.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp,
         ),
-//        colors = CardColors(Color.White),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
         shape = RoundedCornerShape(8.dp)
     ){
         Column(

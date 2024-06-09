@@ -91,7 +91,7 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
         topBar = {
             TopAppBar(
                 title = {
-                        Text(text = stringResource(id = R.string.detail_peminjaman))
+                    Text(text = stringResource(id = R.string.detail_peminjaman))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -100,13 +100,14 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (status.isEmpty() || tanggalKembali.isEmpty()) {
+                        if (status.isEmpty() || (status != "Ditolak" && tanggalKembali.isEmpty())) {
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                         } else {
+                            val updatedTanggalKembali = if (status == "ditolak") null else tanggalKembali
                             viewModel.updatePeminjamanStatus(
                                 idpeminjaman = idpeminjaman ?: 0,
                                 status = status,
-                                tanggalKembali = tanggalKembali
+                                tanggalKembali = updatedTanggalKembali
                             )
                             Toast.makeText(context, "Status berhasil diperbarui", Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
@@ -117,7 +118,6 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
                             contentDescription = stringResource(R.string.simpan),
                             tint = Color(0xFF2587DC)
                         )
-
                     }
                     if (idpeminjaman != null) {
                         BorrowDeleteAction {
@@ -128,7 +128,8 @@ fun AdminDetailPeminjaman(navController: NavHostController, idpeminjaman: Long? 
                 }
             )
         }
-    ) { padding ->
+    )
+    { padding ->
         if (kodePeminjaman.isNotEmpty()) {
             FormPeminjaman(
                 borrowCode = kodePeminjaman.toLong(),

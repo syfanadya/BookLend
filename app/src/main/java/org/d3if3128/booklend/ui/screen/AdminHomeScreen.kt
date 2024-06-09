@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
@@ -31,6 +32,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.BottomAppBarDefaults.containerColor
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -44,6 +46,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -64,6 +67,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -142,7 +146,7 @@ fun AdminHomeScreen(navController: NavHostController) {
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar( containerColor = Color(0xFFE5F0FE)) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedItemIndex == index,
@@ -187,7 +191,8 @@ fun AdminHomeScreen(navController: NavHostController) {
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.FormBaru.route)
-                }
+                },
+                containerColor = Color(0xFFE5F0FE)
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -195,6 +200,7 @@ fun AdminHomeScreen(navController: NavHostController) {
                     tint = Color(0xFF2587DC)
                 )
             }
+
         }
     ) { padding ->
         AdminHomeScreenContent(
@@ -207,6 +213,7 @@ fun AdminHomeScreen(navController: NavHostController) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminHomeScreenContent(
     showList: Boolean,
@@ -246,12 +253,22 @@ fun AdminHomeScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                placeholder = { Text(text = "Search")},
-                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon",
-                    tint = Color(0xFF2587DC)) }, // Icon pencarian
-//                singleLine = true, // Menentukan search bar hanya satu baris
+                placeholder = { Text(text = "Search") },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Search,
+                        contentDescription = "Search Icon",
+                        tint = Color(0xFF2587DC) // Warna ikon pencarian
+                    )
+                },
                 textStyle = TextStyle(color = Color(0xFF2587DC)), // Gaya teks search bar
-                shape = MaterialTheme.shapes.medium // Bentuk search bar
+                shape = MaterialTheme.shapes.medium, // Bentuk search bar
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color(0xFFE5F0FE) // Warna latar belakang TextField
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Search
+                )
             )
             if (showList) {
                 LazyColumn(
